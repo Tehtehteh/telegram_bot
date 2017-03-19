@@ -1,7 +1,7 @@
 from torndb import Connection
 import requests
 import logging
-from ..config import CHAT_ID
+from ..config import CHAT_ID, VK_GROUP_DOMAIN
 
 log = logging.getLogger('application')
 
@@ -51,7 +51,7 @@ class TelegramBot:
         if response.status_code != 200 or 'error' in res:
             log.error('Something went wrong with response from VK...%s' % (res['error'],))
             return
-        res = {x['id']: x['text'] for x in filter(lambda x: '#знакомства_парни' not in x['text'] and
+        res = {x['id']: x['text'] for x in filter(lambda x: '#знакомства_парни' not in x['text'] and  # no gays obv
                                                             ('#ищупарня' in x['text'] or
                                                              '#знакомства' in x['text'] or
                                                              '#ищутебя' in x['text']),
@@ -73,7 +73,7 @@ class TelegramBot:
         self.send_request(self.vk_url.format(method='wall.get',
                                              params='&'.join(
                                                  [k+'='+v for k, v in
-                                                  {'domain': 'odessa.search',
+                                                  {'domain': VK_GROUP_DOMAIN,
                                                    'count': '10'}.items()]),
                                              access_token=self.vk_token))
 
